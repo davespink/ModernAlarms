@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ModernAlarms</string>
+    <string name="newalarm">newAlarm</string>
+    <string name="halt">halt</string>
+</resources>
