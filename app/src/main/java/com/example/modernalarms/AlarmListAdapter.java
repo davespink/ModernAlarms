@@ -1,6 +1,5 @@
 package com.example.modernalarms;
 
-
 import android.content.Context;
 
 import android.graphics.Color;
@@ -12,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,8 +32,6 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
     private final int mResource;
     private int lastPosition = -1;
 
-
-    static MediaPlayer mp;
 
     /**
      * Holds variables in a View
@@ -62,15 +60,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //get the alarm information
-        long id = getItem(position).getId();
-        long start = getItem(position).getStart();
-        //    long stop = getItem(position).getStop();
 
-        String description = getItem(position).getDescription();
 
         //Create the alarm object with the information
-        Alarm alarm = new Alarm(id, start, description);
+        Alarm alarm = new Alarm(getItem(position).getId(), getItem(position).getStart(), getItem(position).getDescription(), getItem(position).getSound());
 
         //create the view result for showing the animation
         final View result;
@@ -110,7 +103,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         int countdown = (int) lCountdown / 1000;
 
 
-        holder.countdown.setText(String.format(Locale.ENGLISH, "%d", countdown));
+        holder.countdown.setText(String.format(Locale.ENGLISH, "%d", Math.round(countdown / 60 + .5)));
 
         if (alarm.getStart() == Long.MAX_VALUE) {
             convertView.setBackgroundColor(Color.LTGRAY);
@@ -118,25 +111,28 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         } else {
             if (countdown < 0) {
                 convertView.setBackgroundColor(Color.RED);
-/*
-                if (mp == null) {
-                    mp = MediaPlayer.create(mContext, R.raw.blockbuster);
+
+                if (MainActivity.mp == null) {
+                    int mpResourceId = mContext.getResources().getIdentifier(alarm.getSound(), "raw", mContext.getPackageName());
+                    if (mpResourceId == 0)  MainActivity.mp = MediaPlayer.create(mContext, R.raw.blockbuster); //default
+                    if (mpResourceId > 0) {
+                        MainActivity.mp = MediaPlayer.create(mContext, mpResourceId);
+                        MainActivity.mp.start();
+                    } else {
+                        Toast.makeText(mContext, "failed to find alarm sound", Toast.LENGTH_SHORT);
+                    }
                 }
-                if (mp.isPlaying()) {
-                    mp.stop();
-                    mp.release();
-                    mp = null;
-                } else {
-                    if (MainActivity.bStopMediaPlayer)
-                        mp.stop();
-                    else
-                        mp.start();
-                }*/
+
             } else convertView.setBackgroundColor(Color.GREEN);
         }
         return convertView;
     }
 }
+
+
+
+
+
 
 
 

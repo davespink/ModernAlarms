@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ModernAlarms</string>
-    <string name="newalarm">newAlarm</string>
-    <string name="halt">halt</string>
+    <string name="newalarm">NEW</string>
+    <string name="halt">HALT</string>
+    <string name="save">SAVE</string>
 </resources>

@@ -1,29 +1,21 @@
 package com.example.modernalarms;
 
-
-
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-
 import android.view.ViewGroup;
-
 import android.widget.ListView;
 import android.widget.TextView;
-
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
     AlarmListAdapter adapter;
 
     Alarm thisAlarm;
-
     final Handler handler = new Handler();
 
+    static public MediaPlayer mp;
 
     Timer timer;
     TimerTask timerTask;
+
+    DatabaseHelper helper;
 
 
     //  static public boolean bStopMediaPlayer = false;
@@ -47,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
 
         ListView mListView = findViewById(R.id.alarmList);
@@ -55,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new AlarmListAdapter(this, R.layout.adapter_view_layout, alarmList);
         mListView.setAdapter(adapter);
+
+        helper = new DatabaseHelper(this);
 
         mListView.setOnItemClickListener((adapterView, view, position, l) -> {
 
@@ -80,28 +75,33 @@ public class MainActivity extends AppCompatActivity {
                 v.setText(thisAlarm.getDescription());
             }
 
-
         });
 
-
-        Alarm s = new Alarm(1, Long.MAX_VALUE, "Free Sheba");
-        alarmList.add(s);
-
-
-        s = new Alarm(2, Long.MAX_VALUE, "Check air frier");
-        alarmList.add(s);
-
-
-        s = new Alarm(3, Long.MAX_VALUE, "Turn off boiler");
-        alarmList.add(s);
-
-
-        s = new Alarm(4, Long.MAX_VALUE, "Kettle");
-        alarmList.add(s);
+        loadData();
 
         startTimer();
 
     }
+
+
+    public void loadData() {
+
+        Alarm s = new Alarm(1, Long.MAX_VALUE, "Free Sheba", "bach");
+        alarmList.add(s);
+        s = new Alarm(2, Long.MAX_VALUE, "Check air frier", "airfryer");
+        alarmList.add(s);
+        s = new Alarm(3, Long.MAX_VALUE, "Check stove", "sheba");
+        alarmList.add(s);
+        s = new Alarm(4, Long.MAX_VALUE, "Turn off boiler", "showers");
+        alarmList.add(s);
+        s = new Alarm(5, Long.MAX_VALUE, "Kettle", "");
+        alarmList.add(s);
+        s = new Alarm(6, Long.MAX_VALUE, "Pool", "");
+        alarmList.add(s);
+
+        persistData();
+    }
+
 
     public void actionButton(View v) {
         String viewID = getResources().getResourceName(v.getId());
@@ -122,36 +122,50 @@ public class MainActivity extends AppCompatActivity {
 
             case "n": {
                 int now = (int) System.currentTimeMillis();
-                long when = now + 1000 * 60 * 60 * 24;
-                Alarm s = new Alarm(now,Long.MAX_VALUE,String.format(Locale.ENGLISH,"New alarm"));
+                long never = now + 1000 * 60 * 60 * 24;
+                Alarm s = new Alarm(never, Long.MAX_VALUE, "New alarm", "blockbuster");
                 alarmList.add(s);
                 break;
             }
             case "h": {
                 //      bStopMediaPlayer = true;
                 thisAlarm.setStart(Long.MAX_VALUE);
+                if (mp != null) {
+                    mp.stop();
+                    mp.release();
+                    mp = null;
+                }
                 break;
             }
             case "5":
             case "10":
             case "30":
             case "60": {
-                int key_mins = Integer.parseInt(thisKey);
-                int now = (int) System.currentTimeMillis();
-                //          Alarm s = new Alarm(now, now, now + 1000 * 60 * key_mins, String.format("New alarm %d mins", key_mins));
-                thisAlarm.setStart(now + 1000 * key_mins);
-                refreshDataset();
-                //   alarmList.add(s);
+                if (thisAlarm == null) {
+                    Toast.makeText(this, "Select an alarm first", Toast.LENGTH_SHORT).show();
+                } else {
+                    int key_mins = Integer.parseInt(thisKey);
+                    int now = (int) System.currentTimeMillis();
+                    //          Alarm s = new Alarm(now, now, now + 1000 * 60 * key_mins, String.format("New alarm %d mins", key_mins));
+                    thisAlarm.setStart(now + (long) 1000 * 60 * key_mins);
+                    refreshDataset();
+                }
                 break;
 
             }
         }
 
-
         refreshDataset();
     }
 
+    public void persistData() {
+        helper.writeAll(alarmList, this);
+    }
+
     public void onDestroy() {
+        stoptimertask();
+
+        persistData();
         adapter.clear();
 
         super.onDestroy();
@@ -183,38 +197,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startTimer() {
-        //set a new Timer
+        final int period = 60;
         timer = new Timer();
 
-        //initialize the TimerTask's job
         initializeTimerTask();
 
-        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 5, 10000); //
+        timer.schedule(timerTask, 5, 1000 * period); //
     }
 
-    public static void stoptimertask() {
+    public void stoptimertask() {
         //stop the timer, if it's not already null
-        // if (timer != null) {
-        //    timer.cancel();
-        //    timer = null;
-        // }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     public void initializeTimerTask() {
-
         timerTask = new TimerTask() {
             public void run() {
 
-                handler.post(()-> {
-                    refreshDataset();
-                });
+                handler.post(() -> refreshDataset());
             }
         };
 
-
     }
-
 
 }
 

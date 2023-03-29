@@ -1,5 +1,6 @@
 package com.example.modernalarms;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,8 +10,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "scatterData";
-    public static final String ALARM_TABLE_NAME = "Alarms";
+    public static final String DATABASE_NAME = "modernData";
+
+    public static final String ALARM_TABLE_NAME = "alarm";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -20,7 +22,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "create table "
-                        + ALARM_TABLE_NAME + "(id integer primary key,  start integer,description string,sound string)"
+                        + ALARM_TABLE_NAME + "(id integer primary key,start integer,description string,sound string)"
         );
     }
 
@@ -62,26 +64,27 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean writeAll(ArrayList<Alarm> alarmList, Context context) {
-     /*
 
         SQLiteDatabase db = getWritableDatabase();
 
-        Alarm alarm = alarmList.get(0);
-
         ContentValues newValues = new ContentValues();
-        newValues.put("id", alarm.getId());
-        newValues.put("start", alarm.getStart());
-        newValues.put("description", alarm.getDescription());
-        newValues.put("sound", alarm.getSound());
+        Alarm alarm;
 
-        db.insert("alarm", null, newValues);
+        for(int i = 0; i < alarmList.size();i++)
+        {
+            alarm = alarmList.get(i);
+            newValues.put("id", alarm.getId());
+            newValues.put("start", alarm.getStart());
+            newValues.put("description", alarm.getDescription());
+            newValues.put("sound", alarm.getSound());
+
+            db.insert("alarm", null, newValues);
+        }
 
 
-        db.close();
-        return true;
+      db.close();
 
 
-      */
 
         return true;
     }}
