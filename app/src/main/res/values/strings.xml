@@ -3,4 +3,5 @@
     <string name="newalarm">NEW</string>
     <string name="halt">HALT</string>
     <string name="save">SAVE</string>
+    <string name="this_is_a_description">This is a description</string>
 </resources>

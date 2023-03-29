@@ -37,22 +37,22 @@ class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         try {
-            String sql = "Select * from alarm where 1 order by  description  COLLATE NOCASE ASC";
+
+            String sql = "Select * from " + ALARM_TABLE_NAME + " where 1 order by  description  COLLATE NOCASE ASC";
             Cursor cursor =
                     db.rawQuery(sql, null);
 
             cursor.moveToFirst();
 
             alarmList.clear();
-            /*
-            while (!cursor.isAfterLast()) {
-                Alarm record = new Alarm(Integer.parseInt(cursor.getString(0)), Integer.parseInt(cursor.getString(1)),
-                        cursor.getString(2), cursor.getString(3));
 
-                alarmList.add(record);
+            while (!cursor.isAfterLast()) {
+                Alarm record = new Alarm(Long.parseLong(cursor.getString(0)), Long.parseLong(cursor.getString(1)),
+                      cursor.getString(2), cursor.getString(3));
+
+              alarmList.add(record);
                 cursor.moveToNext();
             }
-            */
 
             cursor.close();
         } catch (Exception e) {
@@ -70,6 +70,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues newValues = new ContentValues();
         Alarm alarm;
 
+        db.execSQL("delete from "+ ALARM_TABLE_NAME);
+
         for(int i = 0; i < alarmList.size();i++)
         {
             alarm = alarmList.get(i);
@@ -78,7 +80,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             newValues.put("description", alarm.getDescription());
             newValues.put("sound", alarm.getSound());
 
-            db.insert("alarm", null, newValues);
+            db.insert(ALARM_TABLE_NAME, null, newValues);
         }
 
 

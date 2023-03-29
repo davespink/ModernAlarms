@@ -1,10 +1,14 @@
 package com.example.modernalarms;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+
+        //    GradientDrawable gradientDrawable = new GradientDrawable();
+        //    gradientDrawable.setStroke(10, getResources().getColor(R.color.black));
+        //     lv.setBackground(gradientDrawable);
+
+
+
         ListView mListView = findViewById(R.id.alarmList);
         alarmList = new ArrayList<>();
-
         adapter = new AlarmListAdapter(this, R.layout.adapter_view_layout, alarmList);
         mListView.setAdapter(adapter);
+
 
         helper = new DatabaseHelper(this);
 
@@ -79,27 +90,38 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
 
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View secondLayout = inflater.inflate(R.layout.adapter_view_layout, null);
+        View tv = secondLayout.findViewById(R.id.textView_description);
+        tv.setVisibility(View.GONE);
+        ViewGroup parentView = (ViewGroup) tv.getParent();
+        parentView.invalidate();
+        parentView.requestLayout();
+
+
         startTimer();
 
     }
 
 
     public void loadData() {
+        helper.readAll(alarmList, this);
+        if (alarmList.isEmpty()) {
 
-        Alarm s = new Alarm(1, Long.MAX_VALUE, "Free Sheba", "bach");
-        alarmList.add(s);
-        s = new Alarm(2, Long.MAX_VALUE, "Check air frier", "airfryer");
-        alarmList.add(s);
-        s = new Alarm(3, Long.MAX_VALUE, "Check stove", "sheba");
-        alarmList.add(s);
-        s = new Alarm(4, Long.MAX_VALUE, "Turn off boiler", "showers");
-        alarmList.add(s);
-        s = new Alarm(5, Long.MAX_VALUE, "Kettle", "");
-        alarmList.add(s);
-        s = new Alarm(6, Long.MAX_VALUE, "Pool", "");
-        alarmList.add(s);
-
-        persistData();
+            Alarm s = new Alarm(1, Long.MAX_VALUE, "Free Sheba", "bach");
+            alarmList.add(s);
+            s = new Alarm(2, Long.MAX_VALUE, "Check air frier", "airfryer");
+            alarmList.add(s);
+            s = new Alarm(3, Long.MAX_VALUE, "Check stove", "sheba");
+            alarmList.add(s);
+            s = new Alarm(4, Long.MAX_VALUE, "Turn off boiler", "showers");
+            alarmList.add(s);
+            s = new Alarm(5, Long.MAX_VALUE, "Kettle", "");
+            alarmList.add(s);
+            s = new Alarm(6, Long.MAX_VALUE, "Pool", "");
+            alarmList.add(s);
+        }
     }
 
 
@@ -119,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             }
-
             case "n": {
                 int now = (int) System.currentTimeMillis();
                 long never = now + 1000 * 60 * 60 * 24;
@@ -127,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 alarmList.add(s);
                 break;
             }
-            case "h": {
+            case "x": {
                 //      bStopMediaPlayer = true;
                 thisAlarm.setStart(Long.MAX_VALUE);
                 if (mp != null) {
@@ -151,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                     refreshDataset();
                 }
                 break;
-
             }
         }
 
@@ -166,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         stoptimertask();
 
         persistData();
+
         adapter.clear();
 
         super.onDestroy();

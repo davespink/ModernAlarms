@@ -2,18 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-
     android:orientation="horizontal"
-
     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-    android:weightSum="100">
-
+    android:id="@+id/lay_id">
 
     <TextView
         android:id="@+id/textView_id"
         android:layout_width="5dp"
         android:layout_height="6dp"
-
         android:text="TextView_id"
         android:textAlignment="viewStart"
         android:visibility="gone"
@@ -23,7 +19,6 @@
         android:id="@+id/textView_description"
         android:layout_width="290dp"
         android:layout_height="match_parent"
-
         android:padding="10dp"
         android:text="TextView_description"
         android:textAlignment="viewStart"
@@ -37,4 +32,6 @@
         android:text="TextView_countdown"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+
 </LinearLayout>

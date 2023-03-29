@@ -1,83 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#611313">
+    android:backgroundTint="#611313"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/button_n"
+            android:layout_width="85dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dp"
+            android:onClick="actionButton"
+            android:text="@string/newalarm" />
+
+        <Button
+            android:id="@+id/button_s"
+            android:layout_width="85dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dp"
+            android:onClick="actionButton"
+            android:text="@string/save" />
+
+        <Button
+            android:id="@+id/button_x"
+            android:layout_width="85dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dp"
+            android:backgroundTint="#FF0000"
+            android:backgroundTintMode="add"
+            android:onClick="actionButton"
+            android:text="@string/halt"
+            android:textColor="#000000" />
+
+    </LinearLayout>
 
 
     <EditText
         android:id="@+id/description"
         android:layout_width="331dp"
-        android:layout_height="66dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="20dp"
         android:autofillHints=""
         android:inputType=""
-        android:text="This is a description"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/this_is_a_description"
+        android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/button_s"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="8dp"
-        android:onClick="actionButton"
-        android:text="@string/save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_n"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:onClick="actionButton"
-        android:text="@string/newalarm"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_h"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="48dp"
-        android:backgroundTint="#FF0000"
-        android:backgroundTintMode="add"
-
-        android:onClick="actionButton"
-        android:text="@string/halt"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/alarmList"
-        android:layout_width="324dp"
-        android:layout_height="400dp"
-
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="284dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="362dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="152dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_5"
@@ -119,8 +101,16 @@
 
     </LinearLayout>
 
+    <ListView
+        android:id="@+id/alarmList"
+        android:layout_width="match_parent"
+        android:layout_height="379dp"
+        android:layout_marginTop="40dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+
+
+
 
 
 

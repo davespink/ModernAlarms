@@ -3,6 +3,7 @@ package com.example.modernalarms;
 import android.content.Context;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,8 +78,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             holder = new ViewHolder();
 
             holder.id = convertView.findViewById(R.id.textView_id);
-            holder.description = convertView.findViewById(R.id.textView_description);
+            holder.description = convertView.findViewById(R.id.textView_description);;
             holder.countdown = convertView.findViewById(R.id.textView_countdown);
+
+      // do stuff
 
             result = convertView;
 
@@ -114,7 +117,8 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
                 if (MainActivity.mp == null) {
                     int mpResourceId = mContext.getResources().getIdentifier(alarm.getSound(), "raw", mContext.getPackageName());
-                    if (mpResourceId == 0)  MainActivity.mp = MediaPlayer.create(mContext, R.raw.blockbuster); //default
+                    if (mpResourceId == 0)
+                        MainActivity.mp = MediaPlayer.create(mContext, R.raw.blockbuster); //default
                     if (mpResourceId > 0) {
                         MainActivity.mp = MediaPlayer.create(mContext, mpResourceId);
                         MainActivity.mp.start();
@@ -125,6 +129,19 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
             } else convertView.setBackgroundColor(Color.GREEN);
         }
+
+
+      //  GradientDrawable gradientDrawable = new GradientDrawable();
+      //  gradientDrawable.setStroke(10, Color.LTGRAY);
+   //     gradientDrawable.setTint(Color.BLUE);
+
+    //    convertView.setBackground(gradientDrawable);
+
+        // View xxx = (View) convertView.findViewById(R.id.lay_id);
+        // xxx.setBackgroundColor(Color.BLACK);
+        //  xxx.setVisibility(View.GONE);
+
+
         return convertView;
     }
 }
